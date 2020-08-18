@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
-import LoginComponent from "./loginComponent";
+import LoginForm from "./loginForm";
 import loginSchema from "./validation";
 
 const Login = () => {
@@ -15,7 +15,7 @@ const Login = () => {
       >
         {(handleChange, handleSubmit, error, setFieldTouched, touched) => (
           <>
-            <LoginComponent />
+            <LoginForm />
           </>
         )}
       </Formik>
