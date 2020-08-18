@@ -1,21 +1,21 @@
 import React from "react";
 import { Formik } from "formik";
-import LoginForm from "./loginForm";
-import loginSchema from "./validation";
+import RegisterForm from "./registerForm";
+import registerSchema from "./validation";
 
-const Login = React.memo(() => {
+const Register = React.memo(() => {
   return (
     <>
       <Formik
-        initialValues={{ email: "", password: "" }}
-        validationSchema={loginSchema}
+        initialValues={{ name: "", email: "", password: "" }}
+        validationSchema={registerSchema}
         onSubmit={(values) => {
           console.log(values);
         }}
       >
         {(handleChange, handleSubmit, error, setFieldTouched, touched) => (
           <>
-            <LoginForm />
+            <RegisterForm />
           </>
         )}
       </Formik>
@@ -23,4 +23,4 @@ const Login = React.memo(() => {
   );
 });
 
-export default Login;
+export default Register;

@@ -5,7 +5,7 @@ const CustomInput = ({ name, ...otherProps }) => {
   const { handleChange, setFieldTouched, touched } = useFormikContext();
 
   return (
-    <>
+    <div>
       <label>
         {name}
         <Field
@@ -18,7 +18,7 @@ const CustomInput = ({ name, ...otherProps }) => {
           <ErrorMessage name={name} component="div" style={{ color: "red" }} />
         )}
       </label>
-    </>
+    </div>
   );
 };
 
