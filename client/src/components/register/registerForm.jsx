@@ -8,9 +8,10 @@ const RegisterForm = () => {
       <h1>Login</h1>
       <Form>
         <CustomInput type="text" name="name" placeholder="Name" />
-        <CustomInput type="email" name="email" placeholder="Email" />
-        <CustomInput type="password" name="password" placeholder="Password" />
-
+        <div>
+          <CustomInput type="email" name="email" placeholder="Email" />
+          <CustomInput type="password" name="password" placeholder="Password" />
+        </div>
         <button type="submit">Submit</button>
       </Form>
     </>
