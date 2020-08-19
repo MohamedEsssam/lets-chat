@@ -11,14 +11,20 @@ const Register = React.memo(() => {
   const onSubmit = async (values) => {
     try {
       const user = await register(values);
-      if (user)
+      if (user) {
+        toast.success(`Welcome ${user.data.name}🎉🎊`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 6000,
+        });
+
         history.push({
           pathname: "/",
           user: user.data,
         });
+      }
     } catch (err) {
       if (err.response.status === 409)
-        toast.error("User already exists !", {
+        toast.error("User already exists ! 😞", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 6000,
         });

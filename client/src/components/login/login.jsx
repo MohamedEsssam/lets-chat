@@ -12,15 +12,20 @@ const Login = React.memo(() => {
   const onSubmit = async (values) => {
     try {
       const user = await login(values);
-      console.log(user);
-      if (user)
+      if (user) {
+        toast.success(`Welcome ${user.data.name} 🎉🎊`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 6000,
+        });
+
         history.push({
           pathname: "/",
           user: user.data,
         });
+      }
     } catch (err) {
       if (err.response.status === 404)
-        toast.error("invalid email or password", {
+        toast.error("invalid email or password 😞", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 6000,
         });

@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./components/login/login";
 import Register from "./components/register/register";
+import Home from "./components/home/home";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Switch>
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={Register}></Route>
+          <Route path="/" component={Home}></Route>
         </Switch>
       </BrowserRouter>
     </React.Fragment>

@@ -5,7 +5,7 @@ import { Form } from "formik";
 const RegisterForm = () => {
   return (
     <>
-      <h1>Login</h1>
+      <h1>Register</h1>
       <Form>
         <CustomInput type="text" name="name" placeholder="Name" />
         <div>
