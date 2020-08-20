@@ -1,6 +1,6 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
+const room = require("./chatRoom");
 
-router.use("/");
+router.use("/room", room);
 
 module.exports = router;

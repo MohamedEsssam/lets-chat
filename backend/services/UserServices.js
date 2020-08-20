@@ -46,6 +46,18 @@ class UserServices {
       });
     });
   }
+
+  getUserById(userId) {
+    let query = "SELECT * FROM user WHERE userId = UUID_TO_BIN(?);";
+
+    return new Promise((resolve, reject) => {
+      sql.query(query, [userId], (err, result, field) => {
+        if (err) reject(err);
+
+        resolve(result[0]);
+      });
+    });
+  }
 }
 
 module.exports = UserServices;
