@@ -10,7 +10,7 @@ class RoomService {
     const roomId = await this.generateId();
 
     sql.query(
-      "INSERT INTO room (roomId, name, userId)  VALUES (?, ?, UUID_TO_BIN(?));",
+      "INSERT INTO room (roomId, name, userId)  VALUES (UUID_TO_BIN(?), ?, UUID_TO_BIN(?));",
       [roomId, name, userId],
       (err, results, field) => {
         if (err) throw err;
@@ -18,6 +18,39 @@ class RoomService {
     );
 
     return this.getCurrentCreatedRoom(roomId);
+  }
+
+  async update(newName, roomId, userId) {
+    if (!this.validId(roomId)) return;
+    if (!this.validId(userId)) return;
+
+    sql.query(
+      "UPDATE room SET name = ? WHERE roomId = UUID_TO_BIN(?) AND userId = UUID_TO_BIN(?)",
+      [newName, roomId, userId],
+      (err, result, field) => {
+        if (err) throw err;
+      }
+    );
+
+    return this.getCurrentCreatedRoom(roomId);
+  }
+
+  async delete(roomId, userId) {
+    if (!this.validId(roomId)) return;
+    if (!this.validId(userId)) return;
+
+    const room = await this.getCurrentCreatedRoom(roomId);
+    if (!room) return;
+
+    sql.query(
+      "DELETE FROM room WHERE roomId = UUID_TO_BIN(?) AND userId = UUID_TO_BIN(?)",
+      [roomId, userId],
+      (err, result) => {
+        if (err) throw err;
+      }
+    );
+
+    return room;
   }
 
   getRooms() {
@@ -32,10 +65,9 @@ class RoomService {
       );
     });
   }
-  getRoom(roomId) {
-    const uuidRegex = /^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$/;
 
-    if (!uuidRegex.test(roomId)) return;
+  getRoom(roomId) {
+    if (!this.validId(roomId)) return;
 
     return new Promise((resolve, reject) => {
       sql.query(
@@ -54,20 +86,17 @@ class RoomService {
 
   generateId() {
     return new Promise((resolve, reject) => {
-      sql.query(
-        "SELECT UUID_TO_BIN(UUID()) AS roomId",
-        (err, result, field) => {
-          if (err) reject(err);
+      sql.query("SELECT UUID() AS roomId", (err, result, field) => {
+        if (err) reject(err);
 
-          resolve(result[0].roomId);
-        }
-      );
+        resolve(result[0].roomId);
+      });
     });
   }
 
   getCurrentCreatedRoom(roomId) {
     let query =
-      "SELECT BIN_TO_UUID(roomId) AS roomId, name, BIN_TO_UUID(userId) AS userId FROM room WHERE roomId = ? ;";
+      "SELECT BIN_TO_UUID(roomId) AS roomId, name, BIN_TO_UUID(userId) AS userId FROM room WHERE roomId = UUID_TO_BIN(?) ;";
 
     return new Promise((resolve, reject) => {
       sql.query(query, [roomId], (err, result, field) => {
@@ -76,6 +105,12 @@ class RoomService {
         resolve(result[0]);
       });
     });
+  }
+
+  validId(id) {
+    const uuidRegex = /^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$/;
+
+    return uuidRegex.test(id);
   }
 }
 
