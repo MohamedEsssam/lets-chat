@@ -1,3 +1,4 @@
+const io = require("../../startup/socket.io");
 const RoomServices = require("../../services/RoomServices");
 const RoomServicesInstance = new RoomServices();
 
@@ -9,5 +10,6 @@ module.exports = async (req, res) => {
 
   if (!room) return res.status(500).send("something error !");
 
+  io.getIO().emit("rooms", { action: "create", room: room });
   return res.status(200).send(room);
 };
