@@ -13,9 +13,19 @@ const FromModal = React.memo(({ onHide }) => {
       values["userId"] = user.userId;
       const room = await create(values);
 
-      if (room) onHide();
+      if (room) {
+        toast.success("Room created successfully 🎉🎊", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 6000,
+        });
+        onHide();
+      }
     } catch (err) {
-      console.log(err);
+      if (err.response.status === 500)
+        toast.error("Failed to create room 😞", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 6000,
+        });
     }
   };
 

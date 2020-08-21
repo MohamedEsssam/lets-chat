@@ -4,6 +4,7 @@ import openSocket from "socket.io-client";
 import { Button } from "react-bootstrap";
 import { logout } from "../../services/userServices";
 import CustomModal from "../modal/modal";
+import CustomCard from "../card/card";
 import { getRooms } from "../../services/chatRoomServices";
 
 const Home = () => {
@@ -13,7 +14,7 @@ const Home = () => {
     : JSON.parse(localStorage.getItem("user"));
   const [show, setShow] = useState(false);
   const [fetchedRooms, setFetchedRooms] = useState([]);
-  // const [fetched, setFetched] = useState(false);
+  const [fetched, setFetched] = useState(false);
 
   let rooms = [];
   const handleClose = () => setShow(false);
@@ -21,18 +22,23 @@ const Home = () => {
 
   useEffect(() => {
     const socket = openSocket("http://localhost:8000");
-    async function getRoomsFromApi() {
-      const fetchedRooms = await getRooms();
-      rooms = fetchedRooms.data.slice(0);
-      setFetchedRooms(fetchedRooms.data);
-    }
 
+    if (!fetched) loadData();
+    connectToRoom(socket);
+  }, []);
+
+  const connectToRoom = (socket) => {
     socket.on("rooms", (date) => {
       if (date.action === "create") createRoom(date.room);
     });
+  };
 
-    getRoomsFromApi();
-  }, []);
+  const loadData = async () => {
+    const fetchedRooms = await getRooms();
+    rooms = fetchedRooms.data.slice(0);
+    setFetchedRooms(fetchedRooms.data);
+    setFetched(true);
+  };
 
   const createRoom = (room) => {
     let newRooms = rooms.slice(0);
@@ -73,11 +79,7 @@ const Home = () => {
         <h3>hello {user.name}</h3>
         {fetchedRooms &&
           fetchedRooms.map((room) => {
-            return (
-              <div key={room.roomId}>
-                <h1>{room.name}</h1>
-              </div>
-            );
+            return <CustomCard name={room.name} id={room.roomId} />;
           })}
         <Button variant="warning" size="lg" onClick={handleShow}>
           Create Room
