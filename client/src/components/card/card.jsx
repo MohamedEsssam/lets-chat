@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card } from "react-bootstrap";
+import CustomModal from "../modal/modal";
+import { remove } from "../../services/chatRoomServices";
 
 const CustomCard = ({ name, id }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const handleDelete = async () => {
+    let values = {};
+    values.roomId = id;
+    values.userId = user.userId;
+
+    console.log(values);
+    const room = await remove(values);
+    if (room) console.log(room);
+  };
+
   return (
     <>
       <Card
@@ -18,10 +35,11 @@ const CustomCard = ({ name, id }) => {
             size="lg"
             className="mr-2"
             style={{ marginLeft: "13rem" }}
+            onClick={handleShow}
           >
             Update
           </Button>
-          <Button variant="danger" size="lg">
+          <Button variant="danger" size="lg" onClick={handleDelete}>
             Delete
           </Button>
         </Card.Header>
@@ -35,6 +53,13 @@ const CustomCard = ({ name, id }) => {
           </Card.Text>
         </Card.Body>
       </Card>
+      <CustomModal
+        type="Update"
+        roomId={id}
+        initialValues={{ name: name }}
+        show={show}
+        onHide={handleClose}
+      />
     </>
   );
 };

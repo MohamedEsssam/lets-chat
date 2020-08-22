@@ -6,6 +6,16 @@ export async function create(data) {
   return room;
 }
 
+export async function update(data) {
+  const room = await http.put(apiEndpoint + "", data);
+  return room;
+}
+
+export async function remove(data) {
+  const room = await http.delete(apiEndpoint + "", { data });
+  return room;
+}
+
 export async function getRooms() {
   const rooms = await http.get(apiEndpoint + "");
   console.log(rooms);

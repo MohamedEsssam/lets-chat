@@ -30,6 +30,8 @@ const Home = () => {
   const connectToRoom = (socket) => {
     socket.on("rooms", (date) => {
       if (date.action === "create") createRoom(date.room);
+      if (date.action === "delete") deleteRoom(date.room);
+      if (date.action === "update") updateRoom(date.room);
     });
   };
 
@@ -41,8 +43,21 @@ const Home = () => {
   };
 
   const createRoom = (room) => {
+    rooms.unshift(room);
+
+    setFetchedRooms(rooms);
+  };
+
+  const deleteRoom = (room) => {
+    loadData();
+  };
+
+  const updateRoom = (room) => {
     let newRooms = rooms.slice(0);
-    newRooms.unshift(room);
+    newRooms.map((obj) => {
+      if (obj.roomId === room.roomId) obj.name = room.name;
+    });
+
     setFetchedRooms(newRooms);
   };
 
@@ -84,7 +99,12 @@ const Home = () => {
         <Button variant="warning" size="lg" onClick={handleShow}>
           Create Room
         </Button>
-        <CustomModal show={show} onHide={handleClose} />
+        <CustomModal
+          type="Create"
+          initialValues={{ name: "" }}
+          show={show}
+          onHide={handleClose}
+        />
       </div>
     )
   );
