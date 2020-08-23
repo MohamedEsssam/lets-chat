@@ -10,7 +10,7 @@ class RoomService {
     const roomId = await this.generateId();
 
     sql.query(
-      "INSERT INTO room (roomId, name, userId)  VALUES (UUID_TO_BIN(?), ?, UUID_TO_BIN(?));",
+      "INSERT INTO room (roomId, name, createdAt, userId)  VALUES (UUID_TO_BIN(?), ?, NOW(), UUID_TO_BIN(?));",
       [roomId, name, userId],
       (err, results, field) => {
         if (err) throw err;
@@ -56,7 +56,7 @@ class RoomService {
   getRooms() {
     return new Promise((resolve, reject) => {
       sql.query(
-        "SELECT BIN_TO_UUID(roomId) AS roomId, name, BIN_TO_UUID(userId) AS userId FROM room",
+        "SELECT BIN_TO_UUID(roomId) AS roomId, name, BIN_TO_UUID(userId) AS userId FROM room ORDER BY createdAt DESC",
         (err, result, field) => {
           if (err) reject(err);
 
@@ -96,7 +96,7 @@ class RoomService {
 
   getCurrentCreatedRoom(roomId) {
     let query =
-      "SELECT BIN_TO_UUID(roomId) AS roomId, name, BIN_TO_UUID(userId) AS userId FROM room WHERE roomId = UUID_TO_BIN(?) ;";
+      "SELECT BIN_TO_UUID(roomId) AS roomId, name,createdAt, BIN_TO_UUID(userId) AS userId FROM room WHERE roomId = UUID_TO_BIN(?) ;";
 
     return new Promise((resolve, reject) => {
       sql.query(query, [roomId], (err, result, field) => {
