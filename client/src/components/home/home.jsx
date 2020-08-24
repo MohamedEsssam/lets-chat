@@ -15,16 +15,20 @@ const Home = () => {
   const [show, setShow] = useState(false);
   const [fetchedRooms, setFetchedRooms] = useState([]);
   const [fetched, setFetched] = useState(false);
+  const [didMount, setDidMount] = useState(false);
 
   let rooms = [];
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   useEffect(() => {
+    setDidMount(true);
     const socket = openSocket("http://localhost:8000");
 
     if (!fetched) loadData();
     connectToRoom(socket);
+
+    return () => setDidMount(false);
   }, []);
 
   const connectToRoom = (socket) => {
