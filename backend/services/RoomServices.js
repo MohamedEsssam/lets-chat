@@ -43,8 +43,8 @@ class RoomService {
     if (!room) return;
 
     sql.query(
-      "DELETE FROM room WHERE roomId = UUID_TO_BIN(?) AND userId = UUID_TO_BIN(?)",
-      [roomId, userId],
+      "START TRANSACTION; DELETE FROM message WHERE roomId = UUID_TO_BIN(?) AND userId = UUID_TO_BIN(?); DELETE FROM room WHERE roomId = UUID_TO_BIN(?) AND userId = UUID_TO_BIN(?); COMMIT;",
+      [roomId, userId, roomId, userId],
       (err, result) => {
         if (err) throw err;
       }
