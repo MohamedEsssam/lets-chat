@@ -4,7 +4,7 @@ import CustomModal from "../modal/modal";
 import { remove } from "../../services/chatRoomServices";
 import { useHistory } from "react-router-dom";
 
-const CustomCard = ({ name, id }) => {
+const CustomCard = ({ name, id, userId }) => {
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("user"));
   const [show, setShow] = useState(false);
@@ -32,18 +32,22 @@ const CustomCard = ({ name, id }) => {
       >
         <Card.Header style={{ fontSize: "50px" }}>
           {name}
-          <Button
-            variant="dark"
-            size="lg"
-            className="mr-2"
-            style={{ marginLeft: "13rem" }}
-            onClick={handleShow}
-          >
-            Update
-          </Button>
-          <Button variant="danger" size="lg" onClick={handleDelete}>
-            Delete
-          </Button>
+          {userId === user.userId ? (
+            <>
+              <Button
+                variant="dark"
+                size="lg"
+                className="mr-2"
+                style={{ marginLeft: "13rem" }}
+                onClick={handleShow}
+              >
+                Update
+              </Button>
+              <Button variant="danger" size="lg" onClick={handleDelete}>
+                Delete
+              </Button>
+            </>
+          ) : null}
         </Card.Header>
         <Card.Body>
           <Card.Title style={{ fontSize: "50px" }}> Join us </Card.Title>

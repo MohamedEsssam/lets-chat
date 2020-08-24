@@ -7,8 +7,10 @@ export async function login(data) {
   return user;
 }
 
-export function register(data) {
-  const user = http.post(apiEndpoint + "register", data);
+export async function register(data) {
+  const user = await http.post(apiEndpoint + "register", data);
+  localStorage.setItem("user", JSON.stringify(user.data));
+
   return user;
 }
 

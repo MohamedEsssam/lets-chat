@@ -103,7 +103,12 @@ const Home = () => {
         {fetchedRooms &&
           fetchedRooms.map((room) => {
             return (
-              <CustomCard name={room.name} id={room.roomId} key={room.roomId} />
+              <CustomCard
+                name={room.name}
+                id={room.roomId}
+                userId={room.userId}
+                key={room.roomId}
+              />
             );
           })}
         <Button variant="warning" size="lg" onClick={handleShow}>
