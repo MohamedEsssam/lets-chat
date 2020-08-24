@@ -5,7 +5,7 @@ const MessageServicesInstance = new MessageServices();
 module.exports = async (req, res) => {
   const text = req.body.message;
   const userId = req.body.userId;
-  const roomId = req.body.roomId;
+  const roomId = req.params.roomId;
 
   const message = await MessageServicesInstance.create(text, userId, roomId);
 

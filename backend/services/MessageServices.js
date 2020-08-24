@@ -53,10 +53,11 @@ class MessageService {
     return message;
   }
 
-  getMessages() {
+  getMessages(roomId) {
     return new Promise((resolve, reject) => {
       sql.query(
-        "SELECT BIN_TO_UUID(messageId) AS messageId, message, sendAt, BIN_TO_UUID(userId) AS userId, u.name AS username,BIN_TO_UUID(roomId) AS roomId FROM message JOIN user u USING (userId) ORDER BY sendAt DESC",
+        "SELECT BIN_TO_UUID(messageId) AS messageId, message, sendAt, BIN_TO_UUID(userId) AS userId, u.name AS username,BIN_TO_UUID(roomId) AS roomId FROM message JOIN user u USING (userId) WHERE roomId = UUID_TO_BIN(?) ORDER BY sendAt",
+        [roomId],
         (err, result, field) => {
           if (err) reject(err);
 

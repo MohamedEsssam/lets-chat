@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import CustomModal from "../modal/modal";
 import { remove } from "../../services/chatRoomServices";
+import { useHistory } from "react-router-dom";
 
 const CustomCard = ({ name, id }) => {
+  const history = useHistory();
   const user = JSON.parse(localStorage.getItem("user"));
   const [show, setShow] = useState(false);
 
@@ -47,7 +49,14 @@ const CustomCard = ({ name, id }) => {
           <Card.Title style={{ fontSize: "50px" }}> Join us </Card.Title>
           <Card.Text style={{ fontSize: "40px" }}>
             Enter chat
-            <Button variant="secondary" size="lg" className="ml-3">
+            <Button
+              variant="secondary"
+              size="lg"
+              className="ml-3"
+              onClick={() => {
+                history.push(`/chat/${id}`);
+              }}
+            >
               Join
             </Button>
           </Card.Text>

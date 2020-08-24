@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./components/login/login";
 import Register from "./components/register/register";
 import Home from "./components/home/home";
+import Chat from "./components/chat/chat";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Switch>
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={Register}></Route>
+          <Route path="/chat/:id" component={Chat}></Route>
           <Route path="/" component={Home}></Route>
         </Switch>
       </BrowserRouter>

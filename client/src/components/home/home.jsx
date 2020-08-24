@@ -49,7 +49,11 @@ const Home = () => {
   };
 
   const deleteRoom = (room) => {
-    loadData();
+    rooms = rooms.filter(function (obj) {
+      return obj.roomId !== room.roomId;
+    });
+
+    setFetchedRooms(() => [...[], ...rooms]);
   };
 
   const updateRoom = (room) => {
@@ -94,7 +98,9 @@ const Home = () => {
         <h3>hello {user.name}</h3>
         {fetchedRooms &&
           fetchedRooms.map((room) => {
-            return <CustomCard name={room.name} id={room.roomId} />;
+            return (
+              <CustomCard name={room.name} id={room.roomId} key={room.roomId} />
+            );
           })}
         <Button variant="warning" size="lg" onClick={handleShow}>
           Create Room
