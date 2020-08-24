@@ -49,7 +49,7 @@ const Home = () => {
   const createRoom = (room) => {
     rooms.unshift(room);
 
-    setFetchedRooms(rooms);
+    setFetchedRooms(() => [...[], ...rooms]);
   };
 
   const deleteRoom = (room) => {
