@@ -39,7 +39,7 @@ class MessageService {
     if (!this.validId(messageId)) return;
     if (!this.validId(userId)) return;
 
-    const message = await this.getMessage(messageId);
+    const message = await this.getMessage(messageId, userId);
     if (!message) return;
 
     sql.query(
@@ -67,13 +67,13 @@ class MessageService {
     });
   }
 
-  getMessage(messageId) {
+  getMessage(messageId, userId) {
     if (!this.validId(messageId)) return;
 
     return new Promise((resolve, reject) => {
       sql.query(
-        "SELECT BIN_TO_UUID(messageId) AS messageId, message, sendAt, BIN_TO_UUID(userId) AS userId, u.name AS username,BIN_TO_UUID(roomId) AS roomId FROM message JOIN user u USING (userId) WHERE messageId = UUID_TO_BIN(?)  ",
-        [messageId],
+        "SELECT BIN_TO_UUID(messageId) AS messageId, message, sendAt, BIN_TO_UUID(userId) AS userId, u.name AS username,BIN_TO_UUID(roomId) AS roomId FROM message JOIN user u USING (userId) WHERE messageId = UUID_TO_BIN(?) And userId = UUID_TO_BIN(?)  ",
+        [messageId, userId],
         (err, result, field) => {
           if (err) reject(err);
 

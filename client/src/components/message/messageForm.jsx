@@ -19,7 +19,7 @@ const MessageForm = React.memo(({ initialValues, type, roomId, onHide }) => {
       if (message) resetForm({ values: "" });
     } catch (err) {
       if (err.response.status === 500)
-        toast.error(`Failed to ${type} room 😞`, {
+        toast.error(`Failed to send message 😞`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 6000,
         });
