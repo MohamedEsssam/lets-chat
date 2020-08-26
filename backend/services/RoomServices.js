@@ -53,17 +53,35 @@ class RoomService {
     return room;
   }
 
-  getRooms() {
-    return new Promise((resolve, reject) => {
-      sql.query(
-        "SELECT BIN_TO_UUID(roomId) AS roomId, name, BIN_TO_UUID(userId) AS userId FROM room ORDER BY createdAt DESC",
-        (err, result, field) => {
-          if (err) reject(err);
+  getRooms(filter) {
+    const roomName = "^" + filter;
+    let rooms;
+    if (filter) {
+      rooms = new Promise((resolve, reject) => {
+        sql.query(
+          "SELECT BIN_TO_UUID(roomId) AS roomId, name, BIN_TO_UUID(userId) AS userId FROM room WHERE name REGEXP (?) ORDER BY createdAt DESC",
+          [roomName],
+          (err, result, field) => {
+            if (err) reject(err);
 
-          resolve(result);
-        }
-      );
-    });
+            console.log(result);
+            resolve(result);
+          }
+        );
+      });
+    } else
+      rooms = new Promise((resolve, reject) => {
+        sql.query(
+          "SELECT BIN_TO_UUID(roomId) AS roomId, name, BIN_TO_UUID(userId) AS userId FROM room ORDER BY createdAt DESC",
+          (err, result, field) => {
+            if (err) reject(err);
+
+            resolve(result);
+          }
+        );
+      });
+
+    return rooms;
   }
 
   getRoom(roomId) {

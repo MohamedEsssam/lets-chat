@@ -2,7 +2,9 @@ const RoomServices = require("../../services/RoomServices");
 const RoomServicesInstance = new RoomServices();
 
 module.exports = async (req, res) => {
-  const rooms = await RoomServicesInstance.getRooms();
+  const filter = req.query.room;
+
+  const rooms = await RoomServicesInstance.getRooms(filter);
 
   if (!rooms) return res.status(500).send("something error !");
 

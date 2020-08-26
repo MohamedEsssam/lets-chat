@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useHistory, Link } from "react-router-dom";
 import openSocket from "socket.io-client";
+import queryString from "query-string";
 import { Button } from "react-bootstrap";
 import { logout } from "../../services/userServices";
 import CustomModal from "../modal/modal";
@@ -9,6 +10,7 @@ import { getRooms } from "../../services/chatRoomServices";
 
 const Home = () => {
   const location = useLocation();
+  const history = useHistory();
   const user = location.user
     ? location.user
     : JSON.parse(localStorage.getItem("user"));
@@ -69,6 +71,13 @@ const Home = () => {
     setFetchedRooms(newRooms);
   };
 
+  const onChange = async (e) => {
+    history.push(`/?room=${e.target.value}`);
+    let qs = queryString.parse(window.location.search);
+    const newRooms = await getRooms(qs);
+    setFetchedRooms(() => [...[], ...newRooms.data]);
+  };
+
   return !user ? (
     <div>
       <div>
@@ -100,6 +109,12 @@ const Home = () => {
           logout
         </Link>
         <h3>hello {user.name}</h3>
+        <input
+          type="text"
+          id="input"
+          placeholder="search for room"
+          onChange={onChange}
+        />
         {fetchedRooms &&
           fetchedRooms.map((room) => {
             return (
