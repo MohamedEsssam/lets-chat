@@ -5,10 +5,11 @@ import { toast } from "react-toastify";
 import openSocket from "socket.io-client";
 import { getMessages, remove } from "../../services/messageService";
 import MessageForm from "./messageForm";
+import { currentUser } from "../../services/userServices";
 
 const ViewMessage = React.memo(() => {
   const prams = useParams();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = currentUser();
   const [fetched, setFetched] = useState(false);
   const [fetchedMessages, setFetchedMessages] = useState([]);
 
@@ -62,7 +63,6 @@ const ViewMessage = React.memo(() => {
     }
   };
 
-  console.log(fetchedMessages);
   return (
     <>
       <Card

@@ -64,7 +64,6 @@ class RoomService {
           (err, result, field) => {
             if (err) reject(err);
 
-            console.log(result);
             resolve(result);
           }
         );

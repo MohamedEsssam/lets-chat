@@ -19,7 +19,7 @@ export async function remove(data) {
 export async function getRooms(qs) {
   const filter = qs && qs.room ? qs.room : "";
   const rooms = await http.get(apiEndpoint + `/?room=${filter}`);
-  console.log(rooms);
+
   return rooms;
 }
 

@@ -5,11 +5,12 @@ import { Button } from "react-bootstrap";
 import CustomInput from "../forms/inputComponent";
 import createRoomSchema from "./validation";
 import { create, update } from "../../services/chatRoomServices";
+import { currentUser } from "../../services/userServices";
 
 const FromModal = React.memo(({ initialValues, type, roomId, onHide }) => {
   const onSubmit = async (values) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user = currentUser();
       let room;
       values["userId"] = user.userId;
       if (type === "Create") room = await create(values);

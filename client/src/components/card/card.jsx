@@ -3,22 +3,35 @@ import { Button, Card } from "react-bootstrap";
 import CustomModal from "../modal/modal";
 import { remove } from "../../services/chatRoomServices";
 import { useHistory } from "react-router-dom";
+import { currentUser } from "../../services/userServices";
+import { toast } from "react-toastify";
 
 const CustomCard = ({ name, id, userId }) => {
   const history = useHistory();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = currentUser();
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleDelete = async () => {
-    let values = {};
-    values.roomId = id;
-    values.userId = user.userId;
+    try {
+      let values = {};
+      values.roomId = id;
+      values.userId = user.userId;
 
-    console.log(values);
-    const room = await remove(values);
-    if (room) console.log(room);
+      const room = await remove(values);
+      if (room)
+        toast.success(`Room deleted successfully`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 6000,
+        });
+    } catch (err) {
+      if (err)
+        toast.error(`Failed to delete room 😞`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 6000,
+        });
+    }
   };
 
   return (

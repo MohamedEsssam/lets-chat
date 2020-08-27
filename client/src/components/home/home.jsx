@@ -3,7 +3,7 @@ import { useLocation, useHistory, Link } from "react-router-dom";
 import openSocket from "socket.io-client";
 import queryString from "query-string";
 import { Button } from "react-bootstrap";
-import { logout } from "../../services/userServices";
+import { logout, currentUser } from "../../services/userServices";
 import CustomModal from "../modal/modal";
 import CustomCard from "../card/card";
 import { getRooms } from "../../services/chatRoomServices";
@@ -11,9 +11,7 @@ import { getRooms } from "../../services/chatRoomServices";
 const Home = () => {
   const location = useLocation();
   const history = useHistory();
-  const user = location.user
-    ? location.user
-    : JSON.parse(localStorage.getItem("user"));
+  const user = currentUser();
   const [show, setShow] = useState(false);
   const [fetchedRooms, setFetchedRooms] = useState([]);
   const [fetched, setFetched] = useState(false);

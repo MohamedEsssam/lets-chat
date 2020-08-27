@@ -6,12 +6,13 @@ import messageSchema from "./validation";
 import { create } from "../../services/messageService";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { currentUser } from "../../services/userServices";
 
 const MessageForm = React.memo(({ initialValues, type, roomId, onHide }) => {
   const params = useParams();
   const onSubmit = async (values, { resetForm }) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user = currentUser();
       values["userId"] = user.userId;
       values["roomId"] = params.id;
 

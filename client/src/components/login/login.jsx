@@ -13,14 +13,14 @@ const Login = React.memo(() => {
     try {
       const user = await login(values);
       if (user) {
-        toast.success(`Welcome ${user.data.name} 🎉🎊`, {
+        toast.success(`Welcome ${user.name} 🎉🎊`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 6000,
         });
 
         history.push({
           pathname: "/",
-          user: user.data,
+          user: user,
         });
       }
     } catch (err) {

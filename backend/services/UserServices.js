@@ -1,28 +1,23 @@
 const sql = require("../startup/connectDB");
 const bcrypt = require("bcrypt");
+const AuthServices = require("./AuthServices");
+const AuthServicesInstance = new AuthServices();
 class UserServices {
   async login(email, password) {
-    // const query =
-    //   "SELECT BIN_TO_UUID(userId) AS userId, name, email FROM user WHERE email = ? AND password = ? ;";
-
-    // return new Promise((resolve, reject) => {
-    //   sql.query(query, [email, password], (err, result, field) => {
-    //     if (err) reject(err);
-
-    //     resolve(result[0]);
-    //   });
-    // });
-
     const user = await this.getUserByEmail(email);
     if (!user) return;
     if (!(await bcrypt.compare(password, user.password))) return;
 
     delete user["password"];
-    return user;
+
+    const token = AuthServicesInstance.generateToken(user);
+
+    return token;
   }
 
   async register(name, email, password) {
-    const user = await this.getUserByEmail(email);
+    let user;
+    user = await this.getUserByEmail(email);
     if (user) return;
 
     password = await this.encryptPassword(password);
@@ -36,13 +31,17 @@ class UserServices {
     query =
       "SELECT BIN_TO_UUID(userId) AS userId, name, email FROM user WHERE email = ? ;";
 
-    return new Promise((resolve, reject) => {
+    user = await new Promise((resolve, reject) => {
       sql.query(query, [email, password], (err, result, field) => {
         if (err) reject(err);
 
         resolve(result[0]);
       });
     });
+
+    const token = AuthServicesInstance.generateToken(user);
+
+    return token;
   }
 
   getUserByEmail(email) {
